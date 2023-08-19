@@ -1,0 +1,287 @@
+import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.ElementClickInterceptedException;
+import java.util.List;
+import java.util.Scanner;
+import java.util.Arrays;
+import java.util.Random;
+public class Main {
+public static void main(String[] args) {
+Scanner input = new Scanner(System.in);
+System.out.println("Testing Application");
+WebDriver driver = new ChromeDriver(); // Installing Chrome Driver and Opening
+Browser
+driver.get("http://www.tellcapriottis.com"); // Open Capriotti's Website
+System.out.print("Enter 15-digit Survey Code Without Dashes: ");
+String number = input.nextLine();
+System.out.print("Enter Comments: ");
+String comments = input.nextLine();
+// Getting Variables
+String firstThreeDigits = number.substring(0, 3);
+String secondThreeDigits = number.substring(3, 6);
+String thirdThreeDigits = number.substring(6, 9);
+String fourthThreeDigits = number.substring(9, 12);
+String fifthThreeDigits = number.substring(12, 15);
+// Finish Gathering Variables
+// Inputting Gathered Survey Code Into Website
+driver.findElement(By.id("CN1")).sendKeys(firstThreeDigits);
+driver.findElement(By.id("CN2")).sendKeys(secondThreeDigits);
+driver.findElement(By.id("CN3")).sendKeys(thirdThreeDigits);
+driver.findElement(By.id("CN4")).sendKeys(fourthThreeDigits);
+driver.findElement(By.id("CN5")).sendKeys(fifthThreeDigits);
+driver.findElement(By.id("NextButton")).sendKeys(Keys.ENTER);
+// First Page Passed
+
+// Rating Overall Experience 4%
+driver.findElement(By.className("radioSimpleInput")).click();
+driver.findElement(By.id("NextButton")).sendKeys(Keys.ENTER);
+// Visit Type 13%
+driver.findElement(By.xpath("//*[@id=\"FNSR03000\"]/div/div/div[2]/span/span")).click();
+driver.findElement(By.xpath("//*[@id=\"FNSR06000\"]/div/div/div[2]/span/span")).click();
+driver.findElement(By.id("NextButton")).sendKeys(Keys.ENTER);
+// driver.findElement(By.className("radioSimpleInput")).click();
+// Greeted When Entering Resturaunt 19%
+driver.findElement(By.xpath("//*[@id=\"FNSR11000\"]/td[1]/span")).click();
+driver.findElement(By.id("NextButton")).sendKeys(Keys.ENTER);
+// Apparently the survey likes to throw a little curveball and change the order of
+some questions
+// Made a for-each loop to solve this problem.
+List<String> xpaths = Arrays.asList(
+"//*[@id=\"FNSR18000\"]/td[1]/span",
+"//*[@id=\"FNSR31000\"]/td[1]/span",
+"//*[@id=\"FNSR19000\"]/td[1]/span",
+"//*[@id=\"FNSR15000\"]/td[1]/span",
+"//*[@id=\"FNSR25000\"]/td[1]/span",
+"//*[@id=\"FNSR15000\"]/td[1]/span",
+"//*[@id=\"FNSR21000\"]/td[1]/span",
+"//*[@id=\"FNSR27000\"]/td[1]/span",
+"//*[@id=\"FNSR16000\"]/td[1]/span",
+"//*[@id=\"FNSR18000\"]/td[1]/span",
+"//*[@id=\"FNSR19000\"]/td[1]/span"
+);
+for (String xpath : xpaths) {
+try {
+driver.findElement(By.xpath(xpath)).click();
+} catch (NoSuchElementException | ElementClickInterceptedException e) {
+// Element not found or not clickable, continue running the program
+
+}
+}
+//End of Bruteforce
+driver.findElement(By.id("NextButton")).sendKeys(Keys.ENTER);
+// Food Experience 37% Begin for-each loop again
+List<String> xpaths2 = Arrays.asList("//*[@id=\"FNSR15000\"]/td[1]/span",
+"//*[@id=\"FNSR18000\"]/td[1]/span",
+"//*[@id=\"FNSR19000\"]/td[1]/span",
+"//*[@id=\"FNSR33000\"]/td[1]/span",
+"//*[@id=\"FNSR16000\"]/td[1]/span",
+"//*[@id=\"FNSR27000\"]/td[1]/span",
+"//*[@id=\"FNSR21000\"]/td[1]/span",
+"//*[@id=\"FNSR31000\"]/td[1]/span",
+"//*[@id=\"FNSR25000\"]/td[1]/span");
+for (String xpath : xpaths2) {
+try {
+driver.findElement(By.xpath(xpath)).click();
+} catch (NoSuchElementException | ElementClickInterceptedException e) {
+// Element not found or not clickable, continue running the program
+}
+}
+driver.findElement(By.id("NextButton")).sendKeys(Keys.ENTER);
+// Experiencing Problem During Visit Y/N 49%
+driver.findElement(By.xpath("//*[@id=\"FNSR34000\"]/td[2]/span")).click();
+driver.findElement(By.id("NextButton")).sendKeys(Keys.ENTER);
+// Likelihood 55%
+driver.findElement(By.xpath("//*[@id=\"FNSR36000\"]/td[1]/span")).click();
+driver.findElement(By.xpath("//*[@id=\"FNSR37000\"]/td[1]/span")).click();
+driver.findElement(By.id("NextButton")).sendKeys(Keys.ENTER);
+// Adding Comments 55%
+driver.findElement(By.xpath("//*[@id=\"S81006\"]")).sendKeys(comments);
+driver.findElement(By.id("NextButton")).sendKeys(Keys.ENTER);
+// Where do you typically order from (Cap) 66%
+
+driver.findElement(By.xpath("//*[@id=\"FNSR00063\"]/div/div/div[1]/span/span")).click();
+driver.findElement(By.id("NextButton")).sendKeys(Keys.ENTER);
+// Visiting Frequency 67% with random selection
+String[] xpaths3 = {
+"//*[@id=\"FNSR38000\"]/div/div/div[1]/span/span",
+"//*[@id=\"FNSR38000\"]/div/div/div[2]/span/span",
+"//*[@id=\"FNSR38000\"]/div/div/div[3]/span/span",
+"//*[@id=\"FNSR38000\"]/div/div/div[4]/span/span"
+};
+Random rand = new Random();
+int randomNum = rand.nextInt(4);
+if (randomNum == 0) {
+String[] xpaths5 = {
+"//*[@id=\"FNSR39000\"]/td[1]/span",
+"//*[@id=\"FNSR39000\"]/td[2]/span"
+};
+int randomVisit = rand.nextInt(2);
+driver.findElement(By.xpath(xpaths5[randomVisit])).click();
+driver.findElement(By.id("NextButton")).sendKeys(Keys.ENTER);
+}
+driver.findElement(By.xpath(xpaths3[randomNum])).click();
+driver.findElement(By.id("NextButton")).sendKeys(Keys.ENTER);
+// Main Item Ordered 76% with random selection
+String[] xpaths4 = {
+"//*[@id=\"FNSR58000\"]/div/div/div[1]/span/span",
+"//*[@id=\"FNSR58000\"]/div/div/div[2]/span/span",
+"//*[@id=\"FNSR58000\"]/div/div/div[3]/span/span",
+};
+int randomNum2 = rand.nextInt(3);
+if (randomNum2 == 0) {
+driver.findElement(By.xpath(xpaths4[randomNum2])).click();
+driver.findElement(By.id("NextButton")).sendKeys(Keys.ENTER);
+String[] xpaths6 = {
+"//*[@id=\"FNSR59000\"]/div/div/div[1]/span/span",
+
+"//*[@id=\"FNSR59000\"]/div/div/div[2]/span/span",
+"//*[@id=\"FNSR59000\"]/div/div/div[3]/span/span",
+"//*[@id=\"FNSR59000\"]/div/div/div[4]/span/span",
+"//*[@id=\"FNSR59000\"]/div/div/div[5]/span/span",
+"//*[@id=\"FNSR59000\"]/div/div/div[6]/span/span",
+"//*[@id=\"FNSR59000\"]/div/div/div[7]/span/span",
+"//*[@id=\"FNSR59000\"]/div/div/div[8]/span/span",
+"//*[@id=\"FNSR59000\"]/div/div/div[9]/span/span",
+"//*[@id=\"FNSR59000\"]/div/div/div[10]/span/span",
+"//*[@id=\"FNSR59000\"]/div/div/div[11]/span/span",
+"//*[@id=\"FNSR59000\"]/div/div/div[12]/span/span",
+};
+int randomNum4 = rand.nextInt(12);
+driver.findElement(By.xpath(xpaths6[randomNum4])).click();
+driver.findElement(By.id("NextButton")).sendKeys(Keys.ENTER);
+// Sizes
+String[] xpaths7 = {
+"//*[@id=\"FNSR00042\"]/div/div/div[1]/span/span",
+"//*[@id=\"FNSR00042\"]/div/div/div[2]/span/span",
+"//*[@id=\"FNSR00042\"]/div/div/div[3]/span/span",
+"//*[@id=\"FNSR00042\"]/div/div/div[4]/span/span",
+"//*[@id=\"FNSR00042\"]/div/div/div[5]/span/span"
+};
+int randomTest = rand.nextInt(5);
+driver.findElement(By.xpath(xpaths7[randomTest])).click();
+driver.findElement(By.id("NextButton")).sendKeys(Keys.ENTER);
+// Highlighted Receipt
+driver.findElement(By.xpath("//*[@id=\"FNSR00064\"]/td[1]/span")).click();
+driver.findElement(By.id("NextButton")).sendKeys(Keys.ENTER);
+}
+if (randomNum2 == 1) {
+driver.findElement(By.xpath(xpaths4[randomNum2])).click();
+driver.findElement(By.id("NextButton")).sendKeys(Keys.ENTER);
+String[] xpaths5 = {
+
+"//*[@id=\"FNSR60000\"]/div/div/div[1]/span/span",
+"//*[@id=\"FNSR60000\"]/div/div/div[2]/span/span",
+"//*[@id=\"FNSR60000\"]/div/div/div[3]/span/span",
+"//*[@id=\"FNSR60000\"]/div/div/div[4]/span/span",
+"//*[@id=\"FNSR60000\"]/div/div/div[5]/span/span",
+"//*[@id=\"FNSR60000\"]/div/div/div[6]/span/span",
+"//*[@id=\"FNSR60000\"]/div/div/div[7]/span/span",
+"//*[@id=\"FNSR60000\"]/div/div/div[8]/span/span",
+"//*[@id=\"FNSR60000\"]/div/div/div[9]/span/span",
+"//*[@id=\"FNSR60000\"]/div/div/div[10]/span/span",
+"//*[@id=\"FNSR60000\"]/div/div/div[11]/span/span",
+};
+int randomNum3 = rand.nextInt(11);
+driver.findElement(By.xpath(xpaths5[randomNum3])).click();
+driver.findElement(By.id("NextButton")).sendKeys(Keys.ENTER);
+// Sizes
+String[] xpaths7 = {
+"//*[@id=\"FNSR00042\"]/div/div/div[1]/span/span",
+"//*[@id=\"FNSR00042\"]/div/div/div[2]/span/span",
+"//*[@id=\"FNSR00042\"]/div/div/div[3]/span/span",
+"//*[@id=\"FNSR00042\"]/div/div/div[4]/span/span",
+"//*[@id=\"FNSR00042\"]/div/div/div[5]/span/span"
+};
+int randomTest = rand.nextInt(5);
+driver.findElement(By.xpath(xpaths7[randomTest])).click();
+driver.findElement(By.id("NextButton")).sendKeys(Keys.ENTER);
+// Highlighted Receipt
+driver.findElement(By.xpath("//*[@id=\"FNSR00064\"]/td[1]/span")).click();
+driver.findElement(By.id("NextButton")).sendKeys(Keys.ENTER);
+}
+if (randomNum2 == 2) {
+driver.findElement(By.xpath(xpaths4[randomNum2])).click();
+driver.findElement(By.id("NextButton")).sendKeys(Keys.ENTER);
+String[] xpaths7 = {
+"//*[@id=\"FNSR61000\"]/div/div/div[1]/span/span",
+"//*[@id=\"FNSR61000\"]/div/div/div[2]/span/span",
+
+"//*[@id=\"FNSR61000\"]/div/div/div[3]/span/span",
+"//*[@id=\"FNSR61000\"]/div/div/div[4]/span/span",
+"//*[@id=\"FNSR61000\"]/div/div/div[5]/span/span",
+"//*[@id=\"FNSR61000\"]/div/div/div[6]/span/span",
+"//*[@id=\"FNSR61000\"]/div/div/div[7]/span/span",
+};
+int randomNum5 = rand.nextInt(3);
+driver.findElement(By.xpath(xpaths7[randomNum5])).click();
+driver.findElement(By.id("NextButton")).sendKeys(Keys.ENTER);
+driver.findElement(By.xpath("//*[@id=\"FNSR00064\"]/td[1]/span")).click();
+driver.findElement(By.id("NextButton")).sendKeys(Keys.ENTER);
+}
+// Demographics 90%
+// Gender
+String[] xpaths8 = {
+"//*[@id=\"FNSR42000\"]/div/div/div[1]/span/span",
+"//*[@id=\"FNSR42000\"]/div/div/div[2]/span/span",
+"//*[@id=\"FNSR42000\"]/div/div/div[3]/span/span"
+};
+int randomNum5 = rand.nextInt(3);
+driver.findElement(By.xpath(xpaths8[randomNum5])).click();
+
+// Age
+String[] xpaths9 = {
+"//*[@id=\"FNSR43000\"]/div/div/div[1]/span/span",
+"//*[@id=\"FNSR43000\"]/div/div/div[2]/span/span",
+"//*[@id=\"FNSR43000\"]/div/div/div[3]/span/span",
+"//*[@id=\"FNSR43000\"]/div/div/div[4]/span/span",
+"//*[@id=\"FNSR43000\"]/div/div/div[5]/span/span",
+"//*[@id=\"FNSR43000\"]/div/div/div[6]/span/span",
+"//*[@id=\"FNSR43000\"]/div/div/div[7]/span/span"
+};
+int randomNum6 = rand.nextInt(7);
+driver.findElement(By.xpath(xpaths9[randomNum6])).click();
+
+// Income
+String[] xpaths10 = {
+"//*[@id=\"FNSR44000\"]/div/div/div[1]/span/span",
+"//*[@id=\"FNSR44000\"]/div/div/div[2]/span/span",
+"//*[@id=\"FNSR44000\"]/div/div/div[3]/span/span",
+"//*[@id=\"FNSR44000\"]/div/div/div[4]/span/span",
+"//*[@id=\"FNSR44000\"]/div/div/div[5]/span/span",
+"//*[@id=\"FNSR44000\"]/div/div/div[6]/span/span",
+"//*[@id=\"FNSR44000\"]/div/div/div[7]/span/span"
+};
+int randomNum7 = rand.nextInt(7);
+driver.findElement(By.xpath(xpaths10[randomNum7])).click();
+// Race
+String[] xpaths11 = {
+"//*[@id=\"FNSR45000\"]/div/div/div[1]/span/span",
+"//*[@id=\"FNSR45000\"]/div/div/div[2]/span/span",
+"//*[@id=\"FNSR45000\"]/div/div/div[3]/span/span",
+"//*[@id=\"FNSR45000\"]/div/div/div[4]/span/span",
+"//*[@id=\"FNSR45000\"]/div/div/div[5]/span/span",
+"//*[@id=\"FNSR45000\"]/div/div/div[6]/span/span",
+"//*[@id=\"FNSR45000\"]/div/div/div[7]/span/span",
+"//*[@id=\"FNSR45000\"]/div/div/div[8]/span/span"
+};
+int randomNum8 = rand.nextInt(8);
+driver.findElement(By.xpath(xpaths11[randomNum8])).click();
+driver.findElement(By.id("NextButton")).sendKeys(Keys.ENTER);
+// Rewards Program Loyalty 91%
+String[] xpaths12 = {
+"//*[@id=\"FNSR00021\"]/td[1]/span",
+"//*[@id=\"FNSR00021\"]/td[2]/span"
+};
+int randomNum9 = rand.nextInt(3);
+driver.findElement(By.xpath(xpaths12[randomNum9])).click();
+
+driver.findElement(By.id("NextButton")).sendKeys(Keys.ENTER);
+// Validation Code
+System.out.println("Your Response Has Been Submitted");
+System.out.println(driver.findElement(By.className("ValCode")).getText());
+System.out.println("----------------------------------------");
+}
+}
